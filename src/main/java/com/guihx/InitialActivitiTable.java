@@ -10,7 +10,10 @@ import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class InitialActivitiTable {
@@ -28,20 +31,25 @@ public class InitialActivitiTable {
 
     @Test
     public void deploy(){
-        Deployment diyi = processEngine.getRepositoryService().createDeployment().name("第一个部署的流程").addClasspathResource("processes/原石.bpmn").deploy();
+//        Deployment diyi = processEngine.getRepositoryService().createDeployment().name("第一个部署的流程").addClasspathResource("processes/原石.bpmn").deploy();
+//        Deployment diyi = processEngine.getRepositoryService().createDeployment().name("网关测试").addClasspathResource("processes/并排.bpmn").deploy();
+        Deployment diyi = processEngine.getRepositoryService().createDeployment().name("会签直接结束").addClasspathResource("processes/会签直接结束.bpmn").deploy();
         System.out.println(diyi.getId());
     }
 
     @Test
     public void start(){
-        ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey("第一个流程");
+        Map<String,Object> map = new HashMap<>();
+        map.put("cyList", Arrays.asList("jack","tom"));
+        ProcessInstance processInstance = processEngine.getRuntimeService()
+                .startProcessInstanceByKey("会签直接结束 ",map);
         System.out.println(processInstance.getId());
         System.out.println(processInstance.getProcessDefinitionId());
     }
 
     @Test
     public void getTask(){
-        List<Task> taskList = processEngine.getTaskService().createTaskQuery().taskAssignee("").list();
+        List<Task> taskList = processEngine.getTaskService().createTaskQuery().taskAssignee("右").list();
         if(taskList!=null&&taskList.size()>0){
             for (Task task : taskList) {
                 System.out.println(task.getId());
@@ -53,6 +61,9 @@ public class InitialActivitiTable {
 
     @Test
     public void banli(){
-        processEngine.getTaskService().complete("10002");
+        Map<String,Object> map = new HashMap<>();
+        map.put("flag", false);
+        map.put("resule", "n");
+        processEngine.getTaskService().complete("22526",map);
     }
 }
