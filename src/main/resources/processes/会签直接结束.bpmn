@@ -4,7 +4,7 @@
     <startEvent id="_2" name="StartEvent"/>
     <userTask activiti:assignee="${cy}" activiti:exclusive="true" id="_3" name="会签">
       <multiInstanceLoopCharacteristics activiti:collection="cyList" activiti:elementVariable="cy" isSequential="false">
-        <completionCondition><![CDATA[${(nrOfInstances == nrOfCompletedInstances)}]]></completionCondition>
+        <completionCondition><![CDATA[${(flag ==false)||(nrOfCompletedInstances==nrOfInstances)}]]></completionCondition>
       </multiInstanceLoopCharacteristics>
     </userTask>
     <endEvent id="_4" name="EndEvent"/>
